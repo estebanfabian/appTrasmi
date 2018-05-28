@@ -12,9 +12,12 @@ declare var google;
 export class HomePage {
     map: any;
     loading: Loading;
-    x = 4.572102; // cordenada del segundo marcador para mover el marcador 
-    y = -74.151282; // cordenada del segundo marcador para mover el marcador 
-
+    x = 4.595506;
+    y = -74.080934; // cordenada del segundo marcador para mover el marcador 
+    // cordenada del segundo marcador para mover el marcador 
+    tiempo1 = "";
+    total;
+    boton;
     constructor(
         private navCtrl: NavController,
         private geolocation: Geolocation,
@@ -40,24 +43,27 @@ export class HomePage {
     getPosition() {// funcion que da la posicion de la persona  
         this.geolocation.getCurrentPosition()
             .then((position: Geoposition) => {
-                let latitude = position.coords.latitude; // saca la posicion de la persona 
-                let longitude = position.coords.longitude; // saca la posicion de la persona 
+                //                let latitude = position.coords.latitude; // saca la posicion                 de la persona 
+                //                let longitude = position.coords.longitude; // saca la posicion de la persona 
+
+                let latitude = 4.601016;
+                let longitude = -74.075966;
+
                 this.loadMap(latitude, longitude);// llama a la funcion y manda la cordenada de x , y 
-                console.log(latitude)
-                console.log(longitude)
             })
             .catch((error) => {
                 console.log(error);
                 this.loading.dismiss();
             })
-
-
     }
 
 
     loadMap(latitude1, longitude1) {
 
-        this.x = this.x+0.001;
+        this.x = this.x + 0.000441;
+        this.y = this.y + 0.000263;
+        console.log( "al iniciar "+this.x);
+        
         let mypont = {// convirte  a la longitud en json del segundo marcador 
             lat: this.x, lng: this.y
         };
@@ -70,10 +76,16 @@ export class HomePage {
         // create LatLng object
         let myLatLng = {lat: latitude, lng: longitude};
         let myLatLng1 = {lat: this.x, lng: this.y};
+        let total = (Math.pow(latitude - this.x, 2) + Math.pow(longitude - this.y, 2));
+        total = Math.pow(total, 2);
+        console.log(total);
+        this.total = total;
+
         // create map
+
         this.map = new google.maps.Map(mapEle, {
             center: myLatLng,
-            zoom: 12
+            zoom: 14
         });
 
         google.maps.event.addListenerOnce(this.map, 'idle', () => {
@@ -96,8 +108,30 @@ export class HomePage {
             });
             mapEle.classList.add('show-map');
         });
+        if (this.boton == 1) {
+            if ((this.total * 100000000) <= 2.5 && this.x<=4.601239000000005) {
+                let tiempoEspera = (this.x-4.601239000000005)/0.0005733;
+                
+                tiempoEspera = Math.round(tiempoEspera*(-1));
+
+                
+                this.tiempo1 = "tiempo aproximado de llegada " + tiempoEspera + " min";
+                console.log("dentro el if"+this.x);
+            } else  {
+                this.tiempo1 = "El tramileio ya paso por la estación";
+                console.log("dentro el else"+this.x);
+            }
+        } else {
+            this.tiempo1 = "";
+        }
 
     }
 
+    tiempo() {
+        this.boton = 1;
+    }
+    cancelar() {
+        this.boton = 0;
+    }
 
 }

@@ -1,13 +1,14 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>
-  tramiAPP
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <ion-title>
+            tramiAPP
+        </ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <div id="map"></div>
-  <button ion-button>Alimentador 6-1</button>
-  <time></time>
+    <div id="map"></div>
+    <button ion-button (click)="tiempo()">Alimentador 6-1</button>
+    <button ion-button (click)="cancelar()">cancelar</button>
+    <h2 >{{tiempo1}}</h2>
 </ion-content>
